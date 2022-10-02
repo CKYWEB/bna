@@ -12,7 +12,7 @@ const Centered = styled('div', {
   justifyContent: 'center',
   alignItems: 'center',
   height: '100%',
-  paddingTop: '50px'
+  paddingTop: '50px',
 });
 export default function Hello() {
   const [checked, setChecked] = useState(false);
@@ -21,12 +21,17 @@ export default function Hello() {
     <StyletronProvider value={engine}>
       <BaseProvider theme={LightTheme}>
         <Centered>
-          <Card  overrides={{Root: {style: {width: '328px', height: '500px'}}}} title="Now">
+          <Card
+            overrides={{Root: {style: {width: '328px', height: '500px',},},}}
+            title="Now"
+          >
             <ListItem
-              artwork={() => <Checkbox
-              checked={checked}
-              onChange={e => setChecked(e.target.checked)}
-                />}
+              artwork={() => (
+                  <Checkbox
+                    checked={checked}
+                    onChange={e => setChecked(e.target.checked)}
+                  />
+              )}
             >
               <ListItemLabel>Label</ListItemLabel>
           </ListItem>

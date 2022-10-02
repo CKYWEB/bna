@@ -20,9 +20,21 @@
     "baseui"
   ],
   "rules": {
+    "comma-dangle": ["error", {
+      "objects": "always"
+    }],
     "baseui/deprecated-theme-api": "warn",
     "baseui/deprecated-component-api": "warn",
     "baseui/no-deep-imports": "warn",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-max-props-per-line": [1],
+    "react/jsx-indent-props": [2, 2],
+    "react/jsx-props-no-multi-spaces": "warn",
+    "react/jsx-sort-props": [1,
+      {
+        "multiline": "first",
+        "callbacksLast": true
+      }
+    ]
   }
 }
