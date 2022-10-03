@@ -23,18 +23,22 @@
     "comma-dangle": ["error", {
       "objects": "always"
     }],
+    "indent": ["error", 2],
     "baseui/deprecated-theme-api": "warn",
     "baseui/deprecated-component-api": "warn",
     "baseui/no-deep-imports": "warn",
     "react/react-in-jsx-scope": "off",
     "react/jsx-max-props-per-line": [1],
     "react/jsx-indent-props": [2, 2],
+    "react/jsx-indent": [2, 2],
     "react/jsx-props-no-multi-spaces": "warn",
     "react/jsx-sort-props": [1,
       {
         "multiline": "first",
         "callbacksLast": true
       }
-    ]
+    ],
+    "react/self-closing-comp": "warn",
+    "react/jsx-first-prop-new-line": [2, "multiline"]
   }
 }

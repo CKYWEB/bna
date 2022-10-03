@@ -1,3 +1,3 @@
 type Task = {
-    value: string;
+  value: string;
 }

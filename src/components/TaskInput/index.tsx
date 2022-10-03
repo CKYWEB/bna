@@ -3,42 +3,42 @@ import {useState} from "react";
 import { styled } from "baseui";
 
 type Props = {
-    task: Task;
-    onClick?: () => void;
+  task: Task;
+  onClick?: () => void;
 }
 
 const FullWidthLabel = styled('div', {
-    width: '100%',
+  width: '100%',
 });
 
 export default function TaskInput (props: Props) {
-    const [currentEdit, setCurrentEdit] = useState(props.task.value)
-    const [isEditing, setIsEditing] = useState(false)
+  const [currentEdit, setCurrentEdit] = useState(props.task.value)
+  const [isEditing, setIsEditing] = useState(false)
 
-    const handleClickLabel = () => {
-        setIsEditing(true)
-        if (props.onClick) {
-            props.onClick()
-        }
+  const handleClickLabel = () => {
+    setIsEditing(true)
+    if (props.onClick) {
+      props.onClick()
     }
+  }
 
-    const handleBlurInput = () => {
-        setIsEditing(false)
-    }
+  const handleBlurInput = () => {
+    setIsEditing(false)
+  }
 
-    if (isEditing) {
-        return (
-            <Input
-              autoFocus
-              value={currentEdit}
-              onBlur={handleBlurInput}
-              onChange={e => setCurrentEdit(e.target.value)}
-            />
-        )
-    }
+  if (isEditing) {
     return (
-        <FullWidthLabel onClick={handleClickLabel}>
-            {props.task.value}
-        </FullWidthLabel>
+      <Input
+        autoFocus
+        value={currentEdit}
+        onBlur={handleBlurInput}
+        onChange={e => setCurrentEdit(e.target.value)}
+      />
     )
+  }
+  return (
+    <FullWidthLabel onClick={handleClickLabel}>
+      {props.task.value}
+    </FullWidthLabel>
+  )
 }
