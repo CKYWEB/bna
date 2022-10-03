@@ -7,13 +7,13 @@ type Props = {
   onClick?: () => void;
 }
 
-const FullWidthLabel = styled('div', {
-  width: '100%',
-});
-
 export default function TaskInput (props: Props) {
   const [currentEdit, setCurrentEdit] = useState(props.task.value)
   const [isEditing, setIsEditing] = useState(false)
+  const FullWidthLabel = styled('div', ({$theme,}) => ({
+    color: $theme.colors[props.task.isCompleted ? 'mono600' : 'primaryA'],
+    width: '100%',
+  }));
 
   const handleClickLabel = () => {
     setIsEditing(true)

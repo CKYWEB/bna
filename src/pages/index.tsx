@@ -3,9 +3,10 @@ import { BaseProvider, LightTheme, styled } from 'baseui';
 import { Card } from 'baseui/card';
 import { Checkbox } from 'baseui/checkbox';
 import { ListItem } from 'baseui/list';
-import { useState } from 'react';
+import {ChangeEvent, useState} from 'react';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
+import {TASKS} from "@/data";
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -16,7 +17,20 @@ const Centered = styled('div', {
   paddingTop: '50px',
 });
 export default function Hello() {
-  const [checked, setChecked] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>(TASKS)
+
+  const handleCheckChange = (e: ChangeEvent<HTMLInputElement>, targetId: string) => {
+    setTasks(oldTasks => {
+      const tempTasks = [...oldTasks] // TODO: need better copy method
+      tempTasks.forEach(oT=> {
+        if (oT.id === targetId) {
+          oT.isCompleted = !oT.isCompleted
+        }
+      })
+
+      return tempTasks
+    })
+  }
 
   return (
     <StyletronProvider value={engine}>
@@ -26,18 +40,19 @@ export default function Hello() {
             overrides={{Root: {style: {width: '328px', height: '500px',},},}}
             title="Now"
           >
-            <ListItem
-              artwork={() => (
-                <Checkbox
-                  checked={checked}
-                  onChange={e => setChecked(e.target.checked)}
-                />
-              )}
-            >
-              <TaskInput
-                task={{value: "todo1",}}
-              />
-            </ListItem>
+            {tasks.map(t=>
+              <ListItem
+                artwork={() => (
+                  <Checkbox
+                    checked={t.isCompleted}
+                    onChange={(e) => handleCheckChange(e, t.id)}
+                  />
+                )}
+                key={t.id}
+              >
+                <TaskInput task={t} />
+              </ListItem>
+            )}
           </Card>
         </Centered>
       </BaseProvider>
