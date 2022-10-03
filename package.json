@@ -16,7 +16,8 @@
     "react-dom": "17.x",
     "styletron-engine-atomic": "^1.5.0",
     "styletron-react": "^6.1.0",
-    "umi": "^3.5.23"
+    "umi": "^3.5.23",
+    "zustand": "^4.1.1"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",

@@ -3,10 +3,9 @@ import { BaseProvider, LightTheme, styled } from 'baseui';
 import { Card } from 'baseui/card';
 import { Checkbox } from 'baseui/checkbox';
 import { ListItem } from 'baseui/list';
-import {ChangeEvent, useState} from 'react';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
-import {TASKS} from "@/data";
+import {useTaskStore} from "@/utils/store";
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -17,19 +16,11 @@ const Centered = styled('div', {
   paddingTop: '50px',
 });
 export default function Hello() {
-  const [tasks, setTasks] = useState<Task[]>(TASKS)
+  const tasks = useTaskStore(state => state.tasks)
+  const toggleTask = useTaskStore(state => state.toggleTask)
 
-  const handleCheckChange = (e: ChangeEvent<HTMLInputElement>, targetId: string) => {
-    setTasks(oldTasks => {
-      const tempTasks = [...oldTasks] // TODO: need better copy method
-      tempTasks.forEach(oT=> {
-        if (oT.id === targetId) {
-          oT.isCompleted = !oT.isCompleted
-        }
-      })
-
-      return tempTasks
-    })
+  const handleCheckChange = (targetId: string) => {
+    toggleTask(targetId)
   }
 
   return (
@@ -45,7 +36,7 @@ export default function Hello() {
                 artwork={() => (
                   <Checkbox
                     checked={t.isCompleted}
-                    onChange={(e) => handleCheckChange(e, t.id)}
+                    onChange={() => handleCheckChange(t.id)}
                   />
                 )}
                 key={t.id}

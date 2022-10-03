@@ -1,6 +1,7 @@
 import {Input} from "baseui/input";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import { styled } from "baseui";
+import {useTaskStore} from "@/utils/store";
 
 type Props = {
   task: Task;
@@ -8,7 +9,7 @@ type Props = {
 }
 
 export default function TaskInput (props: Props) {
-  const [currentEdit, setCurrentEdit] = useState(props.task.value)
+  const editTask = useTaskStore(state => state.editTask)
   const [isEditing, setIsEditing] = useState(false)
   const FullWidthLabel = styled('div', ({$theme,}) => ({
     color: $theme.colors[props.task.isCompleted ? 'mono600' : 'primaryA'],
@@ -26,13 +27,17 @@ export default function TaskInput (props: Props) {
     setIsEditing(false)
   }
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    editTask(props.task.id, e.target.value)
+  }
+
   if (isEditing) {
     return (
       <Input
         autoFocus
-        value={currentEdit}
+        value={props.task.value}
         onBlur={handleBlurInput}
-        onChange={e => setCurrentEdit(e.target.value)}
+        onChange={handleInputChange}
       />
     )
   }
