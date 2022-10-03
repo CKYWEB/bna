@@ -1,10 +1,11 @@
-import {Client as Styletron} from 'styletron-engine-atomic';
-import {Provider as StyletronProvider} from 'styletron-react';
-import {LightTheme, BaseProvider, styled} from 'baseui';
-import {ListItem, ListItemLabel} from "baseui/list";
-import {Checkbox} from "baseui/checkbox";
-import {useState} from "react";
-import {Card} from "baseui/card";
+import TaskInput from '@/components/TaskInput';
+import { BaseProvider, LightTheme, styled } from 'baseui';
+import { Card } from 'baseui/card';
+import { Checkbox } from 'baseui/checkbox';
+import { ListItem } from 'baseui/list';
+import { useState } from 'react';
+import { Client as Styletron } from 'styletron-engine-atomic';
+import { Provider as StyletronProvider } from 'styletron-react';
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -27,14 +28,16 @@ export default function Hello() {
           >
             <ListItem
               artwork={() => (
-                  <Checkbox
-                    checked={checked}
-                    onChange={e => setChecked(e.target.checked)}
-                  />
+                <Checkbox
+                  checked={checked}
+                  onChange={e => setChecked(e.target.checked)}
+                />
               )}
             >
-              <ListItemLabel>Label</ListItemLabel>
-          </ListItem>
+              <TaskInput
+                task={{value: "todo1",}}
+              />
+            </ListItem>
           </Card>
         </Centered>
       </BaseProvider>
