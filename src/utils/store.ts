@@ -3,9 +3,10 @@ import {TASKS} from "@/utils/data";
 import _ from 'lodash';
 
 interface TaskState {
-  tasks: Task[]
-  toggleTask: (targetId: string) => void
-  editTask: (targetId: string, value: string) => void
+  tasks: Task[];
+  toggleTask: (targetId: string) => void;
+  editTask: (targetId: string, value: string) => void;
+  addTask: (value: string) => void;
 }
 
 const findTask = (tempTasks: Task[], targetId: string) => {
@@ -17,6 +18,7 @@ export const useTaskStore = create<TaskState>((set) => ({
   toggleTask: (targetId: string) => set(state => {
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     const targetTask = findTask(tempTasks, targetId)
+
     if (targetTask !== undefined) {
       targetTask.isCompleted = !targetTask.isCompleted
     }
@@ -28,9 +30,22 @@ export const useTaskStore = create<TaskState>((set) => ({
   editTask: (targetId: string, value: string) => set(state => {
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     const targetTask = findTask(tempTasks, targetId)
+
     if (targetTask !== undefined) {
       targetTask.value = value
     }
+
+    return {
+      tasks: tempTasks,
+    }
+  }),
+  addTask: (value: string) => set(state => {
+    const tempTasks: Task[] = _.cloneDeep(state.tasks)
+    tempTasks.push({
+      id: String(new Date()),
+      value,
+      isCompleted: false,
+    })
 
     return {
       tasks: tempTasks,
