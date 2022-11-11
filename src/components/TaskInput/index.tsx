@@ -11,12 +11,23 @@ type Props = {
 export default function TaskInput (props: Props) {
   const editTask = useTaskStore(state => state.editTask)
   const addTask = useTaskStore(state => state.addTask)
+  const deleteTask = useTaskStore(state => state.deleteTask)
   const [isEditing, setIsEditing] = useState(false)
   const FullWidthLabel = styled('div', ({$theme,}) => ({
     color: $theme.colors[props.task?.isCompleted ? 'mono600' : 'primaryA'],
     width: '100%',
     minHeight: '24px', // to make sure div don't collapse when empty
   }));
+
+  const handleEditDone = (value: string) => {
+    if (props.task === undefined && value !== '') {
+      addTask(value)
+    }
+    if (props.task && value === '') {
+      deleteTask(props.task.id)
+    }
+    setIsEditing(false)
+  }
 
   const handleClickLabel = () => {
     setIsEditing(true)
@@ -26,10 +37,7 @@ export default function TaskInput (props: Props) {
   }
 
   const handleBlurInput = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (props.task === undefined && e.target.value !== '') {
-      addTask(e.target.value)
-    }
-    setIsEditing(false)
+    handleEditDone(e.target.value)
   }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -45,6 +53,12 @@ export default function TaskInput (props: Props) {
       <Input
         autoFocus
         value={props.task?.value}
+        onKeyPress={e => {
+          if (e.key === 'Enter') {
+            // @ts-ignore
+            handleEditDone(e.target.value)
+          }
+        }}
         onBlur={handleBlurInput}
         onChange={handleInputChange}
       />

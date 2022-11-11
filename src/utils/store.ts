@@ -7,6 +7,7 @@ interface TaskState {
   toggleTask: (targetId: string) => void;
   editTask: (targetId: string, value: string) => void;
   addTask: (value: string) => void;
+  deleteTask: (targetId: string) => void;
 }
 
 const findTask = (tempTasks: Task[], targetId: string) => {
@@ -46,6 +47,18 @@ export const useTaskStore = create<TaskState>((set) => ({
       value,
       isCompleted: false,
     })
+
+    return {
+      tasks: tempTasks,
+    }
+  }),
+  deleteTask: (targetId: string) => set(state => {
+    const tempTasks: Task[] = _.cloneDeep(state.tasks)
+    const targetTaskIndex = tempTasks.findIndex(t=> t.id === targetId)
+
+    if (targetTaskIndex !== undefined) {
+      tempTasks.splice(targetTaskIndex, 1)
+    }
 
     return {
       tasks: tempTasks,
