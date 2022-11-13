@@ -6,6 +6,8 @@ import {useTaskStore} from "@/utils/store";
 type Props = {
   task?: Task;
   onClick?: () => void;
+  isEditing?: boolean;
+  setIsEditing?: (v: boolean) => void;
 }
 
 export default function TaskInput (props: Props) {
@@ -26,11 +28,20 @@ export default function TaskInput (props: Props) {
     if (props.task && value === '') {
       deleteTask(props.task.id)
     }
-    setIsEditing(false)
+    if (props.setIsEditing) {
+      props.setIsEditing(false)
+    } else {
+      setIsEditing(false)
+    }
   }
 
   const handleClickLabel = () => {
-    setIsEditing(true)
+    if (props.setIsEditing) {
+      props.setIsEditing(true)
+    } else {
+      setIsEditing(true)
+    }
+
     if (props.onClick) {
       props.onClick()
     }
@@ -47,8 +58,7 @@ export default function TaskInput (props: Props) {
       return
     }
   }
-
-  if (isEditing) {
+  if (isEditing || props.isEditing) {
     return (
       <Input
         autoFocus

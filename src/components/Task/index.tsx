@@ -5,6 +5,8 @@ import {useTaskStore} from "@/utils/store";
 
 type Props = {
   data?: Task;
+  isEditing?: boolean;
+  setIsEditing?: (v: boolean) => void;
 }
 
 export default function Task (props: Props) {
@@ -15,7 +17,10 @@ export default function Task (props: Props) {
           <Checkbox disabled/>
         )}
       >
-        <TaskInput />
+        <TaskInput
+          isEditing={props.isEditing}
+          setIsEditing={props.setIsEditing}
+        />
       </ListItem>
     )
   }
@@ -36,7 +41,11 @@ export default function Task (props: Props) {
       )}
       key={id}
     >
-      <TaskInput task={props.data}/>
+      <TaskInput
+        task={props.data}
+        isEditing={props.isEditing}
+        setIsEditing={props.setIsEditing}
+      />
     </ListItem>
   )
 }

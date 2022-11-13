@@ -4,6 +4,7 @@ import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
 import {useTaskStore} from "@/utils/store";
 import Task from '@/components/Task';
+import { useState } from "react";
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -15,6 +16,11 @@ const Centered = styled('div', {
 });
 export default function Hello() {
   const tasks = useTaskStore(state => state.tasks)
+  const [isEditingNew, setIsEditingNew] = useState(false)
+
+  const handleClickMargin = () => {
+    setIsEditingNew(true)
+  }
 
   return (
     <StyletronProvider value={engine}>
@@ -24,7 +30,7 @@ export default function Hello() {
             overrides={{Root: {style: {width: '328px', height: '540px',},},}}
             title="Now"
           >
-            <StyledBody style={{ overflowY: 'auto', height: '450px', }}>
+            <StyledBody style={{ overflowY: 'auto', height: '450px', display: 'flex', flexDirection: 'column' }}>
               <div>
                 {tasks.map(t =>
                   <Task
@@ -32,8 +38,20 @@ export default function Hello() {
                     data={t}
                   />
                 )}
-                <Task data={undefined}/>
+                {isEditingNew &&
+                  <Task
+                    data={undefined}
+                    isEditing={isEditingNew}
+                    setIsEditing={setIsEditingNew}
+                  />
+                }
               </div>
+              {!isEditingNew &&
+                <div
+                  style={{flexGrow: 1}}
+                  onClick={handleClickMargin}
+                />
+              }
             </StyledBody>
           </Card>
         </Centered>
