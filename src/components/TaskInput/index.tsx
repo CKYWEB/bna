@@ -63,6 +63,20 @@ export default function TaskInput (props: Props) {
       <Input
         autoFocus
         value={props.task?.value}
+        overrides={{
+          Root: {
+            style: () => ({
+              border: 'none',
+            }),
+          },
+          Input: {
+            style: ({ $theme }) => ({
+              backgroundColor: '#FFF',
+              paddingLeft: 0,
+              color: $theme.colors[props.task?.isCompleted ? 'mono600' : 'primaryA'],
+            })
+          }
+        }}
         onKeyPress={e => {
           if (e.key === 'Enter') {
             // @ts-ignore
