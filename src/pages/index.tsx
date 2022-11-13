@@ -24,7 +24,7 @@ export default function Hello() {
             overrides={{Root: {style: {width: '328px', height: '540px',},},}}
             title="Now"
           >
-            <StyledBody style={{ overflowY: 'scroll', height: '450px', }}>
+            <StyledBody style={{ overflowY: 'auto', height: '450px', }}>
               <div>
                 {tasks.map(t =>
                   <Task
