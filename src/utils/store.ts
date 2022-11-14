@@ -4,10 +4,12 @@ import _ from 'lodash';
 
 interface TaskState {
   tasks: Task[];
+  isEditingNew: boolean;
   toggleTask: (targetId: string) => void;
   editTask: (targetId: string, value: string) => void;
   addTask: (value: string) => void;
   deleteTask: (targetId: string) => void;
+  setIsEditingNew: (v: boolean) => void;
 }
 
 const findTask = (tempTasks: Task[], targetId: string) => {
@@ -16,6 +18,7 @@ const findTask = (tempTasks: Task[], targetId: string) => {
 
 export const useTaskStore = create<TaskState>((set) => ({
   tasks: TASKS,
+  isEditingNew: false,
   toggleTask: (targetId: string) => set(state => {
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     const targetTask = findTask(tempTasks, targetId)
@@ -62,6 +65,11 @@ export const useTaskStore = create<TaskState>((set) => ({
 
     return {
       tasks: tempTasks,
+    }
+  }),
+  setIsEditingNew: (v: boolean) => set(() => {
+    return {
+      isEditingNew: v,
     }
   }),
 }))

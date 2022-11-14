@@ -4,7 +4,6 @@ import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
 import {useTaskStore} from "@/utils/store";
 import Task from '@/components/Task';
-import { useState } from "react";
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -16,7 +15,8 @@ const Centered = styled('div', {
 });
 export default function Hello() {
   const tasks = useTaskStore(state => state.tasks)
-  const [isEditingNew, setIsEditingNew] = useState(false)
+  const isEditingNew = useTaskStore(state => state.isEditingNew)
+  const setIsEditingNew = useTaskStore(state => state.setIsEditingNew)
 
   const handleClickMargin = () => {
     setIsEditingNew(true)
@@ -38,15 +38,10 @@ export default function Hello() {
                     data={t}
                   />
                 )}
-                {isEditingNew &&
-                  <Task
-                    data={undefined}
-                    isEditing={isEditingNew}
-                    setIsEditing={setIsEditingNew}
-                  />
-                }
+
               </div>
-              {!isEditingNew &&
+              {isEditingNew ?
+                <Task data={undefined} /> :
                 <div
                   style={{flexGrow: 1}}
                   onClick={handleClickMargin}

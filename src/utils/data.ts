@@ -6,7 +6,7 @@ export const TASKS: Task[] = [
   },
   {
     id: '2',
-    value: 'feed the dog',
+    value: 'this is a long text this is a long text this is a long text this is a long text this is a long text',
     isCompleted: false,
   }
 ]

@@ -5,8 +5,6 @@ import {useTaskStore} from "@/utils/store";
 
 type Props = {
   data?: Task;
-  isEditing?: boolean;
-  setIsEditing?: (v: boolean) => void;
 }
 
 export default function Task (props: Props) {
@@ -42,11 +40,7 @@ export default function Task (props: Props) {
         }
       }}
     >
-      <TaskInput
-        task={props.data}
-        isEditing={props.isEditing}
-        setIsEditing={props.setIsEditing}
-      />
+      <TaskInput task={props.data} />
     </ListItem>
   )
 }
