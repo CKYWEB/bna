@@ -17,9 +17,9 @@ export default function TaskInput (props: Props) {
   const isAddingNewTask = props.task === undefined
 
   const handleEditDone = (value: string) => {
+    setIsEditingNew(false)
     if (isAddingNewTask && value !== '') {
       addTask(value)
-      setIsEditingNew(false)
     }
     if (props.task && value === '') {
       deleteTask(props.task.id)
