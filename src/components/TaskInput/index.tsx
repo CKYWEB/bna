@@ -1,7 +1,7 @@
-import {Input} from "baseui/input";
-import {ChangeEvent, useState, FocusEvent} from "react";
-import { styled } from "baseui";
+import {ChangeEvent, FocusEvent, useRef, useState} from "react";
+import {styled} from "baseui";
 import {useTaskStore} from "@/utils/store";
+import {Textarea} from "baseui/textarea";
 
 type Props = {
   task?: Task;
@@ -19,7 +19,10 @@ export default function TaskInput (props: Props) {
     color: $theme.colors[props.task?.isCompleted ? 'mono600' : 'primaryA'],
     width: '100%',
     minHeight: '24px', // to make sure div don't collapse when empty
+    wordBreak: 'break-all',
   }));
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [textAreaHeight, setTextAreaHeight] = useState<number | undefined>(24)
 
   const handleEditDone = (value: string) => {
     if (props.task === undefined && value !== '') {
@@ -52,16 +55,22 @@ export default function TaskInput (props: Props) {
   }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setTextAreaHeight(inputRef.current?.scrollHeight)
     if (props.task) {
       editTask(props.task.id, e.target.value)
 
       return
     }
   }
+
+  const handleFocus = () => {
+    setTextAreaHeight(inputRef.current?.scrollHeight)
+  }
   if (isEditing || props.isEditing) {
     return (
-      <Input
+      <Textarea
         autoFocus
+        inputRef={inputRef}
         value={props.task?.value}
         overrides={{
           Root: {
@@ -70,11 +79,16 @@ export default function TaskInput (props: Props) {
             }),
           },
           Input: {
-            style: ({ $theme }) => ({
-              backgroundColor: '#FFF',
-              paddingLeft: 0,
-              color: $theme.colors[props.task?.isCompleted ? 'mono600' : 'primaryA'],
-            })
+            style: ({ $theme }) => {
+              return {
+                backgroundColor: '#FFF',
+                paddingLeft: 0,
+                color: $theme.colors[props.task?.isCompleted ? 'mono600' : 'primaryA'],
+                overflow: 'hidden',
+                height: textAreaHeight + 'px',
+                padding: '0px',
+              }
+            }
           }
         }}
         onKeyPress={e => {
@@ -84,6 +98,7 @@ export default function TaskInput (props: Props) {
           }
         }}
         onBlur={handleBlurInput}
+        onFocus={handleFocus}
         onChange={handleInputChange}
       />
     )

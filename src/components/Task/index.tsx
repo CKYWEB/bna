@@ -10,36 +10,37 @@ type Props = {
 }
 
 export default function Task (props: Props) {
-  if (props.data === undefined) {
-    return (
-      <ListItem
-        artwork={() => (
-          <Checkbox disabled/>
-        )}
-      >
-        <TaskInput
-          isEditing={props.isEditing}
-          setIsEditing={props.setIsEditing}
-        />
-      </ListItem>
-    )
-  }
-  const {id, isCompleted} = props.data
   const toggleTask = useTaskStore(state => state.toggleTask)
 
-  const handleCheckChange = (targetId: string) => {
-    toggleTask(targetId)
+  const handleCheckChange = (targetId: string | undefined) => {
+    if (targetId) {
+      toggleTask(targetId)
+    }
   }
 
   return (
     <ListItem
       artwork={() => (
         <Checkbox
-          checked={isCompleted}
-          onChange={() => handleCheckChange(id)}
+          checked={props.data?.isCompleted}
+          onChange={() => handleCheckChange(props.data?.id)}
+          disabled={props.data === undefined}
         />
       )}
-      key={id}
+      key={props.data?.id}
+      overrides={{
+        Root: {
+          style: () => ({
+            alignItems: 'baseline',
+          })
+        },
+        Content: {
+          style: () => ({
+            minHeight: '0px',
+            padding: '16px 0',
+          })
+        }
+      }}
     >
       <TaskInput
         task={props.data}
