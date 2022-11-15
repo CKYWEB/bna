@@ -6,8 +6,8 @@ interface TaskState {
   tasks: Task[];
   isEditingNew: boolean;
   toggleTask: (targetId: string) => void;
-  editTask: (targetId: string, value: string) => void;
-  addTask: (value: string) => void;
+  editTask: (task: Task) => void;
+  addTask: (name: TaskText, remark?: TaskText) => void;
   deleteTask: (targetId: string) => void;
   setIsEditingNew: (v: boolean) => void;
 }
@@ -31,23 +31,26 @@ export const useTaskStore = create<TaskState>((set) => ({
       tasks: tempTasks,
     }
   }),
-  editTask: (targetId: string, value: string) => set(state => {
+  editTask: (task: Task) => set(state => {
+    const targetId = task.id
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     const targetTask = findTask(tempTasks, targetId)
 
     if (targetTask !== undefined) {
-      targetTask.name = value
+      targetTask.name = task.name
+      targetTask.remark = task.remark
     }
 
     return {
       tasks: tempTasks,
     }
   }),
-  addTask: (value: string) => set(state => {
+  addTask: (name: TaskText, remark?: TaskText) => set(state => {
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     tempTasks.push({
       id: String(new Date()),
-      name: value,
+      name,
+      remark,
       isCompleted: false,
     })
 

@@ -38,7 +38,6 @@ export default function Hello() {
                     data={t}
                   />
                 )}
-
               </div>
               {isEditingNew ?
                 <Task data={undefined} /> :
