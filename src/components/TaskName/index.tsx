@@ -7,7 +7,7 @@ type Props = {
   onClick?: () => void;
 }
 
-export default function TaskInput (props: Props) {
+export default function TaskName (props: Props) {
   const editTask = useTaskStore(state => state.editTask)
   const addTask = useTaskStore(state => state.addTask)
   const deleteTask = useTaskStore(state => state.deleteTask)
@@ -47,7 +47,7 @@ export default function TaskInput (props: Props) {
     <Textarea
       autoFocus={isAddingNewTask}
       inputRef={inputRef}
-      value={props.task?.value}
+      value={props.task?.name}
       overrides={{
         Root: {
           style: () => ({

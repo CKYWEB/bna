@@ -1,5 +1,5 @@
 import {Checkbox} from "baseui/checkbox";
-import TaskInput from "@/components/TaskInput";
+import TaskName from "@/components/TaskName";
 import {ListItem} from "baseui/list";
 import {useTaskStore} from "@/utils/store";
 
@@ -40,7 +40,7 @@ export default function Task (props: Props) {
         }
       }}
     >
-      <TaskInput task={props.data} />
+      <TaskName task={props.data} />
     </ListItem>
   )
 }

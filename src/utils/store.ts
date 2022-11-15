@@ -36,7 +36,7 @@ export const useTaskStore = create<TaskState>((set) => ({
     const targetTask = findTask(tempTasks, targetId)
 
     if (targetTask !== undefined) {
-      targetTask.value = value
+      targetTask.name = value
     }
 
     return {
@@ -47,7 +47,7 @@ export const useTaskStore = create<TaskState>((set) => ({
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     tempTasks.push({
       id: String(new Date()),
-      value,
+      name: value,
       isCompleted: false,
     })
 
