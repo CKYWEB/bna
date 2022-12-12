@@ -56,7 +56,7 @@ export default function NameForm (props: Props) {
     setRemark(props.data?.remark)
   }, [])
 
-  if (name || isEditingNew) {
+  if (name !== undefined || isEditingNew) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <NameTextArea
