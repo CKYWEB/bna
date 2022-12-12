@@ -10,11 +10,12 @@ type Props = {
   onKeyPress?: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-export default function NameTextArea (props: Props) {
+export default function TaskTextArea (props: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const {onKeyPress, onBlur, onChange} = props
+  const {onKeyPress, onBlur, onChange, onFocus} = props
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (onKeyPress) {
@@ -31,6 +32,12 @@ export default function NameTextArea (props: Props) {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (onChange) {
       onChange(e)
+    }
+  }
+
+  const handleInputFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (onFocus) {
+      onFocus(e)
     }
   }
 
@@ -63,6 +70,7 @@ export default function NameTextArea (props: Props) {
       }}
       onKeyPress={handleKeyPress}
       onBlur={handleInputBlur}
+      onFocus={handleInputFocus}
       onChange={handleInputChange}
     />
   )
