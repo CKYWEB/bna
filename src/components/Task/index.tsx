@@ -1,10 +1,10 @@
-import {Checkbox} from "baseui/checkbox";
-import {ListItem} from "baseui/list";
-import {useTaskStore} from "@/utils/store";
-import {Button, SHAPE, SIZE} from "baseui/button";
-import {Overflow} from "baseui/icon";
-import {ChangeEvent, KeyboardEvent, useEffect, useState} from "react";
-import TaskTextArea from "@/components/Task/TaskTextArea";
+import TaskTextArea from '@/components/Task/TaskTextArea';
+import { useTaskStore } from '@/utils/store';
+import { Button, SHAPE, SIZE } from 'baseui/button';
+import { Checkbox } from 'baseui/checkbox';
+import { Overflow } from 'baseui/icon';
+import { ListItem } from 'baseui/list';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 
 type Props = {
   data?: Task;
@@ -78,50 +78,52 @@ export default function Task (props: Props) {
       artwork={() => (
         <Checkbox
           checked={props.data?.isCompleted}
-          onChange={() => handleCheckChange(props.data?.id)}
           disabled={props.data === undefined}
+          onChange={() => handleCheckChange(props.data?.id)}
         />
       )}
       endEnhancer={() => (
         isFocusing && !isEditingNew ?
-          <Button size={SIZE.mini} shape={SHAPE.circle}>
+          <Button
+            shape={SHAPE.circle}
+            size={SIZE.mini}>
             <Overflow size={16} />
           </Button> :
           null
       )}
-      key={props.data?.id}
       overrides={{
         Root: {
           style: () => ({
             alignItems: 'baseline',
-          })
+          }),
         },
         Content: {
           style: () => ({
             minHeight: '0px',
             padding: '16px 0',
-          })
-        }
+          }),
+        },
       }}
+      key={props.data?.id}
     >
       {name !== undefined || isEditingNew ?
-        <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div style={{display: 'flex', flexDirection: 'column',}}>
           <TaskTextArea
             autoFocus={props.data === undefined}
-            value={name}
             isGray={props.data?.isCompleted}
-            onChange={handleNameChange}
+            value={name}
             onBlur={handleNameBlur}
+            onChange={handleNameChange}
             onFocus={handleFocusText}
             onKeyPress={handleNameKeyPress}
           />
           {props.data !== undefined &&
             <TaskTextArea
-              value={remark}
               isMini
+              value={remark}
+              onBlur={handleRemarkBlur}
               onChange={handleRemarkChange}
               onFocus={handleFocusText}
-              onBlur={handleRemarkBlur}
             />
           }
         </div>

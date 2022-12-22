@@ -1,6 +1,6 @@
-import {ChangeEvent, FocusEvent, KeyboardEvent, useRef} from "react";
-import {SIZE, Textarea} from "baseui/textarea";
-import useAutosizeTextArea from "@/hooks/useAutosizeTextArea";
+import useAutosizeTextArea from '@/hooks/useAutosizeTextArea';
+import { SIZE, Textarea } from 'baseui/textarea';
+import { ChangeEvent, FocusEvent, KeyboardEvent, useRef } from 'react';
 
 type Props = {
   value: TaskText;
@@ -15,7 +15,7 @@ type Props = {
 
 export default function TaskTextArea (props: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const {onKeyPress, onBlur, onChange, onFocus} = props
+  const {onKeyPress, onBlur, onChange, onFocus,} = props
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (onKeyPress) {
@@ -45,11 +45,6 @@ export default function TaskTextArea (props: Props) {
 
   return (
     <Textarea
-      inputRef={inputRef}
-      autoFocus={props.autoFocus}
-      size={props.isMini ? SIZE.mini : undefined}
-      value={props.value}
-      placeholder={props.isMini ? 'add notes' : undefined}
       overrides={{
         Root: {
           style: () => ({
@@ -57,7 +52,7 @@ export default function TaskTextArea (props: Props) {
           }),
         },
         Input: {
-          style: ({ $theme }) => {
+          style: ({ $theme, }) => {
             return {
               backgroundColor: '#FFF',
               paddingLeft: 0,
@@ -65,13 +60,18 @@ export default function TaskTextArea (props: Props) {
               overflow: 'hidden',
               padding: '0px',
             }
-          }
-        }
+          },
+        },
       }}
-      onKeyPress={handleKeyPress}
+      autoFocus={props.autoFocus}
+      inputRef={inputRef}
+      placeholder={props.isMini ? 'add notes' : undefined}
+      size={props.isMini ? SIZE.mini : undefined}
+      value={props.value}
       onBlur={handleInputBlur}
-      onFocus={handleInputFocus}
       onChange={handleInputChange}
+      onFocus={handleInputFocus}
+      onKeyPress={handleKeyPress}
     />
   )
 }

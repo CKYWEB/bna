@@ -1,6 +1,6 @@
-import create from 'zustand'
-import {TASKS} from "@/utils/data";
+import { TASKS } from '@/utils/data';
 import _ from 'lodash';
+import create from 'zustand';
 
 interface TaskState {
   tasks: Task[];
