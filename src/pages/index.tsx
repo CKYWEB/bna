@@ -17,9 +17,11 @@ export default function Hello() {
   const tasks = useTaskStore(state => state.tasks)
   const isEditingNew = useTaskStore(state => state.isEditingNew)
   const setIsEditingNew = useTaskStore(state => state.setIsEditingNew)
+  const setFocusId = useTaskStore(state => state.setFocusId)
 
   const handleClickMargin = () => {
     setIsEditingNew(true)
+    setFocusId(null)
   }
 
   return (

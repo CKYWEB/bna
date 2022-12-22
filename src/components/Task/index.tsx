@@ -1,10 +1,11 @@
 import TaskTextArea from '@/components/Task/TaskTextArea';
 import { useTaskStore } from '@/utils/store';
-import { Button, SHAPE, SIZE } from 'baseui/button';
+import { Button, SHAPE, SIZE as BUTTONSIZE } from 'baseui/button';
 import { Checkbox } from 'baseui/checkbox';
 import { Overflow } from 'baseui/icon';
 import { ListItem } from 'baseui/list';
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE} from 'baseui/modal';
+import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 
 type Props = {
   data?: Task;
@@ -13,13 +14,15 @@ type Props = {
 export default function Task (props: Props) {
   const toggleTask = useTaskStore(state => state.toggleTask)
   const isEditingNew = useTaskStore(state => state.isEditingNew)
+  const isFocusing = useTaskStore(state => state.focusId) === props.data?.id
   const [name, setName] = useState<TaskText>()
   const [remark, setRemark] = useState<TaskText>()
-  const [isFocusing, setFocusing] = useState<Boolean>(false)
+  const [isCheckingMore, setCheckingMore] = useState(false)
   const setIsEditingNew = useTaskStore(state => state.setIsEditingNew)
   const addTask = useTaskStore(state => state.addTask)
   const editTask = useTaskStore(state => state.editTask)
   const deleteTask = useTaskStore(state => state.deleteTask)
+  const setFocusId = useTaskStore(state => state.setFocusId)
 
   const handleCheckChange = (targetId: string | undefined) => {
     if (targetId) {
@@ -27,8 +30,14 @@ export default function Task (props: Props) {
     }
   }
 
-  const handleEditDone = () => {
-    setFocusing(false)
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setName(e.target.value)
+  }
+
+  const handleTextBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (e.relatedTarget?.id === 'btn--more') {
+      handleMoreOpen()
+    }
     setIsEditingNew(false)
 
     if (!props.data) {
@@ -42,30 +51,22 @@ export default function Task (props: Props) {
     }
   }
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setName(e.target.value)
-  }
-
-  const handleNameBlur = () => {
-    handleEditDone()
-  }
-
-  const handleNameKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
-      handleEditDone()
-    }
-  }
-
   const handleRemarkChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRemark(e.target.value)
   }
 
-  const handleRemarkBlur = () => {
-    handleEditDone()
+  const handleTextFocus = () => {
+    if (props.data?.id) {
+      setFocusId(props.data?.id)
+    }
   }
 
-  const handleFocusText = () => {
-    setFocusing(true)
+  const handleMoreOpen = () => {
+    setCheckingMore(true)
+  }
+
+  const handleMoreClose = () => {
+    setCheckingMore(false)
   }
 
   useEffect(() => {
@@ -74,61 +75,79 @@ export default function Task (props: Props) {
   }, [])
 
   return (
-    <ListItem
-      artwork={() => (
-        <Checkbox
-          checked={props.data?.isCompleted}
-          disabled={props.data === undefined}
-          onChange={() => handleCheckChange(props.data?.id)}
-        />
-      )}
-      endEnhancer={() => (
-        isFocusing && !isEditingNew ?
-          <Button
-            shape={SHAPE.circle}
-            size={SIZE.mini}>
-            <Overflow size={16} />
-          </Button> :
-          null
-      )}
-      overrides={{
-        Root: {
-          style: () => ({
-            alignItems: 'baseline',
-          }),
-        },
-        Content: {
-          style: () => ({
-            minHeight: '0px',
-            padding: '16px 0',
-          }),
-        },
-      }}
-      key={props.data?.id}
-    >
-      {name !== undefined || isEditingNew ?
-        <div style={{display: 'flex', flexDirection: 'column',}}>
-          <TaskTextArea
-            autoFocus={props.data === undefined}
-            isGray={props.data?.isCompleted}
-            value={name}
-            onBlur={handleNameBlur}
-            onChange={handleNameChange}
-            onFocus={handleFocusText}
-            onKeyPress={handleNameKeyPress}
+    <>
+      <ListItem
+        artwork={() => (
+          <Checkbox
+            checked={props.data?.isCompleted}
+            disabled={props.data === undefined}
+            onChange={() => handleCheckChange(props.data?.id)}
           />
-          {props.data !== undefined &&
+        )}
+        endEnhancer={() => (
+          isFocusing && !isEditingNew ?
+            <Button
+              id="btn--more"
+              shape={SHAPE.circle}
+              size={BUTTONSIZE.mini}
+              onClick={handleMoreOpen}
+            >
+              <Overflow size={16}/>
+            </Button> :
+            null
+        )}
+        overrides={{
+          Content: {
+            style: () => ({
+              minHeight: '0px',
+              padding: '16px 0',
+            }),
+          },
+        }}
+        key={props.data?.id}
+      >
+        {name !== undefined || isEditingNew ?
+          <div style={{display: 'flex', flexDirection: 'column',}}>
+            <TaskTextArea
+              autoFocus={props.data === undefined}
+              isGray={props.data?.isCompleted}
+              value={name}
+              onBlur={handleTextBlur}
+              onChange={handleNameChange}
+              onFocus={handleTextFocus}
+            />
+            {props.data !== undefined &&
             <TaskTextArea
               isMini
               value={remark}
-              onBlur={handleRemarkBlur}
+              onBlur={handleTextBlur}
               onChange={handleRemarkChange}
-              onFocus={handleFocusText}
+              onFocus={handleTextFocus}
             />
-          }
-        </div>
-        : null
-      }
-    </ListItem>
+            }
+          </div>
+          : null
+        }
+      </ListItem>
+      <Modal
+        isOpen={isCheckingMore}
+        size={MODALSIZE.auto}
+        onClose={handleMoreClose}
+      >
+        <ModalHeader>Details</ModalHeader>
+        <ModalBody>
+          {props.data?.name}
+        </ModalBody>
+        <ModalFooter>
+          <ModalButton
+            kind="tertiary"
+            onClick={handleMoreClose}
+          >
+            Cancel
+          </ModalButton>
+          <ModalButton onClick={handleMoreClose}>Done</ModalButton>
+        </ModalFooter>
+      </Modal>
+    </>
   )
 }

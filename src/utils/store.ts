@@ -5,11 +5,13 @@ import create from 'zustand';
 interface TaskState {
   tasks: Task[];
   isEditingNew: boolean;
+  focusId: Task["id"] | null;
   toggleTask: (targetId: string) => void;
   editTask: (task: Task) => void;
   addTask: (name: TaskText, remark?: TaskText) => void;
   deleteTask: (targetId: string) => void;
   setIsEditingNew: (v: boolean) => void;
+  setFocusId: (id: Task["id"] | null) => void;
 }
 
 const findTask = (tempTasks: Task[], targetId: string) => {
@@ -19,6 +21,7 @@ const findTask = (tempTasks: Task[], targetId: string) => {
 export const useTaskStore = create<TaskState>((set) => ({
   tasks: TASKS,
   isEditingNew: false,
+  focusId: null,
   toggleTask: (targetId: string) => set(state => {
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     const targetTask = findTask(tempTasks, targetId)
@@ -73,6 +76,11 @@ export const useTaskStore = create<TaskState>((set) => ({
   setIsEditingNew: (v: boolean) => set(() => {
     return {
       isEditingNew: v,
+    }
+  }),
+  setFocusId: (id: Task["id"] | null) => set(() => {
+    return {
+      focusId: id,
     }
   }),
 }))
