@@ -103,6 +103,11 @@ export default function Task (props: Props) {
               padding: '16px 0',
             }),
           },
+          EndEnhancerContainer: {
+            style: () => ({
+              flexBasis: '45px',
+            }),
+          },
         }}
         key={props.data?.id}
       >
