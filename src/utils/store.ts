@@ -2,16 +2,24 @@ import { TASKS } from '@/utils/data';
 import _ from 'lodash';
 import create from 'zustand';
 
+type FocusTypes = 'TEXT' | 'TASK'
+
+type EditTaskForm = {
+  name: TaskText;
+  remark?: TaskText;
+}
+
 interface TaskState {
   tasks: Task[];
   isEditingNew: boolean;
-  focusId: Task["id"] | null;
+  currentFocusTextId: Task["id"] | null;
+  currentFocusTaskId: Task["id"] | null;
   toggleTask: (targetId: string) => void;
-  editTask: (task: Task) => void;
+  editTask: (targetId: string, task: EditTaskForm) => void;
   addTask: (name: TaskText, remark?: TaskText) => void;
   deleteTask: (targetId: string) => void;
   setIsEditingNew: (v: boolean) => void;
-  setFocusId: (id: Task["id"] | null) => void;
+  changeFocus: (id?: Task["id"], type?: FocusTypes) => void;
 }
 
 const findTask = (tempTasks: Task[], targetId: string) => {
@@ -21,7 +29,8 @@ const findTask = (tempTasks: Task[], targetId: string) => {
 export const useTaskStore = create<TaskState>((set) => ({
   tasks: TASKS,
   isEditingNew: false,
-  focusId: null,
+  currentFocusTextId: null,
+  currentFocusTaskId: null,
   toggleTask: (targetId: string) => set(state => {
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     const targetTask = findTask(tempTasks, targetId)
@@ -34,8 +43,7 @@ export const useTaskStore = create<TaskState>((set) => ({
       tasks: tempTasks,
     }
   }),
-  editTask: (task: Task) => set(state => {
-    const targetId = task.id
+  editTask: (targetId: string, task: EditTaskForm) => set(state => {
     const tempTasks: Task[] = _.cloneDeep(state.tasks)
     const targetTask = findTask(tempTasks, targetId)
 
@@ -78,9 +86,26 @@ export const useTaskStore = create<TaskState>((set) => ({
       isEditingNew: v,
     }
   }),
-  setFocusId: (id: Task["id"] | null) => set(() => {
+  changeFocus: (id?: Task["id"], type?: FocusTypes) => set(() => {
+    if (id) {
+      if (type === 'TEXT') {
+        return {
+          currentFocusTextId: id,
+          currentFocusTaskId: null,
+        }
+      }
+
+      if (type === 'TASK') {
+        return {
+          currentFocusTextId: null,
+          currentFocusTaskId: id,
+        }
+      }
+    }
+
     return {
-      focusId: id,
+      currentFocusTextId: null,
+      currentFocusTaskId: null,
     }
   }),
 }))

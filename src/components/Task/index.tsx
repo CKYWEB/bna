@@ -4,7 +4,7 @@ import { Button, SHAPE, SIZE as BUTTONSIZE } from 'baseui/button';
 import { Checkbox } from 'baseui/checkbox';
 import { Overflow } from 'baseui/icon';
 import { ListItem } from 'baseui/list';
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE} from 'baseui/modal';
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE } from 'baseui/modal';
 import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 
 type Props = {
@@ -14,7 +14,8 @@ type Props = {
 export default function Task (props: Props) {
   const toggleTask = useTaskStore(state => state.toggleTask)
   const isEditingNew = useTaskStore(state => state.isEditingNew)
-  const isFocusing = useTaskStore(state => state.focusId) === props.data?.id
+  const isFocusingText = useTaskStore(state => state.currentFocusTextId) === props.data?.id
+  const isFocusingTask = useTaskStore(state => state.currentFocusTaskId) === props.data?.id
   const [name, setName] = useState<TaskText>()
   const [remark, setRemark] = useState<TaskText>()
   const [isCheckingMore, setCheckingMore] = useState(false)
@@ -22,7 +23,16 @@ export default function Task (props: Props) {
   const addTask = useTaskStore(state => state.addTask)
   const editTask = useTaskStore(state => state.editTask)
   const deleteTask = useTaskStore(state => state.deleteTask)
-  const setFocusId = useTaskStore(state => state.setFocusId)
+  const changeFocus = useTaskStore(state => state.changeFocus)
+
+  const handleMoreBtnClick = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>) => {
+    if (e.relatedTarget?.id === 'btn--more') {
+      handleMoreOpen()
+      return true
+    }
+
+    return false
+  }
 
   const handleCheckChange = (targetId: string | undefined) => {
     if (targetId) {
@@ -35,9 +45,7 @@ export default function Task (props: Props) {
   }
 
   const handleTextBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (e.relatedTarget?.id === 'btn--more') {
-      handleMoreOpen()
-    }
+    handleMoreBtnClick(e)
     setIsEditingNew(false)
 
     if (!props.data) {
@@ -47,7 +55,7 @@ export default function Task (props: Props) {
     } else if (!name) {
       deleteTask(props.data.id)
     } else {
-      editTask(props.data)
+      editTask(props.data.id, {name, remark,})
     }
   }
 
@@ -56,9 +64,7 @@ export default function Task (props: Props) {
   }
 
   const handleTextFocus = () => {
-    if (props.data?.id) {
-      setFocusId(props.data?.id)
-    }
+    changeFocus(props.data?.id, 'TEXT')
   }
 
   const handleMoreOpen = () => {
@@ -69,13 +75,30 @@ export default function Task (props: Props) {
     setCheckingMore(false)
   }
 
+  const handleTaskFocus = () => {
+    changeFocus(props.data?.id, 'TASK')
+  }
+
+  const handleTaskBlur = (e: FocusEvent<HTMLDivElement>) => {
+    if (!handleMoreBtnClick(e)) {
+      changeFocus(undefined)
+    }
+  }
+
   useEffect(() => {
     setName(props.data?.name)
     setRemark(props.data?.remark)
   }, [])
 
   return (
-    <>
+    <div
+      style={{
+        cursor: 'pointer',
+      }}
+      tabIndex={0}
+      onBlur={handleTaskBlur}
+      onFocus={handleTaskFocus}
+    >
       <ListItem
         artwork={() => (
           <Checkbox
@@ -85,22 +108,30 @@ export default function Task (props: Props) {
           />
         )}
         endEnhancer={() => (
-          isFocusing && !isEditingNew ?
-            <Button
-              id="btn--more"
-              shape={SHAPE.circle}
-              size={BUTTONSIZE.mini}
-              onClick={handleMoreOpen}
-            >
-              <Overflow size={16}/>
-            </Button> :
-            null
+          <Button
+            style={{
+              display: (isFocusingText || isFocusingTask) && !isEditingNew ? undefined: 'none',
+            }}
+            id="btn--more"
+            shape={SHAPE.circle}
+            size={BUTTONSIZE.compact}
+            onClick={handleMoreOpen}
+          >
+            <Overflow size={20}/>
+          </Button>
         )}
         overrides={{
+          Root: {
+            style: ({ $theme, }) => ({
+              border: '1px solid',
+              borderColor: $theme.colors[isFocusingTask ? 'primary300' : 'primaryB'],
+            }),
+          },
           Content: {
             style: () => ({
               minHeight: '0px',
               padding: '16px 0',
+              border: 'none',
             }),
           },
           EndEnhancerContainer: {
@@ -122,13 +153,13 @@ export default function Task (props: Props) {
               onFocus={handleTextFocus}
             />
             {props.data !== undefined &&
-            <TaskTextArea
-              isMini
-              value={remark}
-              onBlur={handleTextBlur}
-              onChange={handleRemarkChange}
-              onFocus={handleTextFocus}
-            />
+              <TaskTextArea
+                isMini
+                value={remark}
+                onBlur={handleTextBlur}
+                onChange={handleRemarkChange}
+                onFocus={handleTextFocus}
+              />
             }
           </div>
           : null
@@ -153,6 +184,6 @@ export default function Task (props: Props) {
           <ModalButton onClick={handleMoreClose}>Done</ModalButton>
         </ModalFooter>
       </Modal>
-    </>
+    </div>
   )
 }

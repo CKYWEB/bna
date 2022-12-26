@@ -12,18 +12,18 @@ const Centered = styled('div', {
   justifyContent: 'center',
   alignItems: 'center',
   height: '100%',
-  paddingTop: '50px',
+  paddingTop: '20px',
 });
 export default function App() {
   const tasks = useTaskStore(state => state.tasks)
   const isEditingNew = useTaskStore(state => state.isEditingNew)
   const setIsEditingNew = useTaskStore(state => state.setIsEditingNew)
-  const setFocusId = useTaskStore(state => state.setFocusId)
+  const changeFocus = useTaskStore(state => state.changeFocus)
   const cardBodyRef = useRef<HTMLDivElement>(null)
 
   const handleClickMargin = () => {
     setIsEditingNew(true)
-    setFocusId(null)
+    changeFocus(undefined)
   }
 
   // hook that keeps scrollbar at bottom when adding new
@@ -40,12 +40,24 @@ export default function App() {
       <BaseProvider theme={LightTheme}>
         <Centered>
           <Card
-            overrides={{Root: {style: {width: '380px', height: '540px',},},}}
+            overrides={{
+              Root: {
+                style: {
+                  width: '380px',
+                  height: '680px',
+                },
+              },
+              Title: {
+                style: {
+                  userSelect: 'none',
+                },
+              },
+            }}
             title="Now"
           >
             <StyledBody
               ref={cardBodyRef}
-              style={{ overflowY: 'auto', height: '450px', display: 'flex', flexDirection: 'column', }}
+              style={{ overflowY: 'auto', height: '610px', display: 'flex', flexDirection: 'column', }}
             >
               <div>
                 {tasks.map(t =>

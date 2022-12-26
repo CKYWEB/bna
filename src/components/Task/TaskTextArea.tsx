@@ -49,6 +49,7 @@ export default function TaskTextArea (props: Props) {
         Root: {
           style: () => ({
             border: 'none',
+            userSelect: 'none',
           }),
         },
         Input: {
