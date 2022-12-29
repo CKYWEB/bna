@@ -48,7 +48,10 @@ export default function TaskTextArea (props: Props) {
       overrides={{
         Root: {
           style: () => ({
-            border: 'none',
+            borderLeftStyle: 'none',
+            borderRightStyle: 'none',
+            borderTopStyle: 'none',
+            borderBottomStyle: 'none',
             userSelect: 'none',
           }),
         },
@@ -56,10 +59,12 @@ export default function TaskTextArea (props: Props) {
           style: ({ $theme, }) => {
             return {
               backgroundColor: '#FFF',
-              paddingLeft: 0,
               color: $theme.colors[props.isGray ? 'mono600' : 'primaryA'],
               overflow: 'hidden',
-              padding: '0px',
+              paddingLeft: '0px',
+              paddingRight: '0px',
+              paddingTop: '0px',
+              paddingBottom: '0px',
             }
           },
         },

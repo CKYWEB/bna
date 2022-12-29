@@ -123,15 +123,22 @@ export default function Task (props: Props) {
         overrides={{
           Root: {
             style: ({ $theme, }) => ({
-              border: '1px solid',
+              borderWidth: '1px',
+              borderStyle: 'solid',
               borderColor: $theme.colors[isFocusingTask ? 'primary300' : 'primaryB'],
             }),
           },
           Content: {
             style: () => ({
               minHeight: '0px',
-              padding: '16px 0',
-              border: 'none',
+              paddingTop: '16px',
+              paddingBottom: '16px',
+              paddingLeft: '0px',
+              paddingRight: '0px',
+              borderLeftStyle: 'none',
+              borderRightStyle: 'none',
+              borderTopStyle: 'none',
+              borderBottomStyle: 'none',
             }),
           },
           EndEnhancerContainer: {
