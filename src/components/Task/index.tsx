@@ -11,6 +11,9 @@ type Props = {
   data?: Task;
 }
 
+const MORE_BTN_ID = 'btn--more'
+const REMARK_TEXTAREA_ID = 'textarea--remark'
+
 export default function Task (props: Props) {
   const toggleTask = useTaskStore(state => state.toggleTask)
   const isEditingNew = useTaskStore(state => state.isEditingNew)
@@ -26,7 +29,7 @@ export default function Task (props: Props) {
   const changeFocus = useTaskStore(state => state.changeFocus)
 
   const handleMoreBtnClick = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>) => {
-    if (e.relatedTarget?.id === 'btn--more') {
+    if (e.relatedTarget?.id === MORE_BTN_ID) {
       handleMoreOpen()
       return true
     }
@@ -80,7 +83,7 @@ export default function Task (props: Props) {
   }
 
   const handleTaskBlur = (e: FocusEvent<HTMLDivElement>) => {
-    if (!handleMoreBtnClick(e) && e.relatedTarget?.id !== 'remarkTextArea') {
+    if (!handleMoreBtnClick(e) && e.relatedTarget?.id !== REMARK_TEXTAREA_ID) {
       changeFocus(undefined)
     }
   }
@@ -112,9 +115,9 @@ export default function Task (props: Props) {
             style={{
               display: (isFocusingText || isFocusingTask) && !isEditingNew ? undefined: 'none',
             }}
-            id="btn--more"
+            id={MORE_BTN_ID}
             shape={SHAPE.circle}
-            size={BUTTONSIZE.compact}
+            size={BUTTONSIZE.mini}
             onClick={handleMoreOpen}
           >
             <Overflow size={20}/>
@@ -161,7 +164,7 @@ export default function Task (props: Props) {
             />
             {(props.data?.remark !== undefined || isFocusingTask || isFocusingText) &&
               <TaskTextArea
-                id="remarkTextArea"
+                id={REMARK_TEXTAREA_ID}
                 isGray={props.data?.isCompleted}
                 isMini
                 value={remark}
