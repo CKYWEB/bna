@@ -20,6 +20,7 @@ interface TaskState {
   deleteTask: (targetId: string) => void;
   setIsEditingNew: (v: boolean) => void;
   changeFocus: (id?: Task["id"], type?: FocusTypes) => void;
+  sortTasks: () => void;
 }
 
 const findTask = (tempTasks: Task[], targetId: string) => {
@@ -106,6 +107,23 @@ export const useTaskStore = create<TaskState>((set) => ({
     return {
       currentFocusTextId: null,
       currentFocusTaskId: null,
+    }
+  }),
+  sortTasks: () => set(state => {
+    const tempTasks: Task[] = _.cloneDeep(state.tasks)
+
+    return {
+      tasks: tempTasks.sort((a,b) => {
+        if (a.isCompleted && !b.isCompleted) {
+          return 1
+        }
+
+        if (!a.isCompleted && b.isCompleted) {
+          return -1
+        }
+
+        return 0
+      }),
     }
   }),
 }))
