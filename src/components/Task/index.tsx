@@ -80,7 +80,7 @@ export default function Task (props: Props) {
   }
 
   const handleTaskBlur = (e: FocusEvent<HTMLDivElement>) => {
-    if (!handleMoreBtnClick(e)) {
+    if (!handleMoreBtnClick(e) && e.relatedTarget?.id !== 'remarkTextArea') {
       changeFocus(undefined)
     }
   }
@@ -159,8 +159,10 @@ export default function Task (props: Props) {
               onChange={handleNameChange}
               onFocus={handleTextFocus}
             />
-            {props.data !== undefined &&
+            {(props.data?.remark !== undefined || isFocusingTask || isFocusingText) &&
               <TaskTextArea
+                id="remarkTextArea"
+                isGray={props.data?.isCompleted}
                 isMini
                 value={remark}
                 onBlur={handleTextBlur}

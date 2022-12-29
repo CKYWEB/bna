@@ -5,6 +5,7 @@ import { ChangeEvent, FocusEvent, KeyboardEvent, useRef } from 'react';
 type Props = {
   value: TaskText;
   autoFocus?: boolean;
+  id?: string;
   isGray?: boolean;
   isMini?: boolean;
   onKeyPress?: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
@@ -70,6 +71,7 @@ export default function TaskTextArea (props: Props) {
         },
       }}
       autoFocus={props.autoFocus}
+      id={props.id}
       inputRef={inputRef}
       placeholder={props.isMini ? 'add notes' : undefined}
       size={props.isMini ? SIZE.mini : undefined}
