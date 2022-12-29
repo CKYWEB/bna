@@ -4,7 +4,8 @@ import { BaseProvider, LightTheme, styled } from 'baseui';
 import { Card, StyledBody } from 'baseui/card';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE } from "baseui/modal";
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -20,10 +21,21 @@ export default function App() {
   const setIsEditingNew = useTaskStore(state => state.setIsEditingNew)
   const changeFocus = useTaskStore(state => state.changeFocus)
   const cardBodyRef = useRef<HTMLDivElement>(null)
+  const [isCheckingMore, setCheckingMore] = useState(false)
+  const [currentTask, setCurrentTask] = useState<Task>()
 
   const handleClickMargin = () => {
     setIsEditingNew(true)
     changeFocus(undefined)
+  }
+
+  const handleMoreOpen = (t: Task) => {
+    setCheckingMore(true)
+    setCurrentTask(t)
+  }
+
+  const handleMoreClose = () => {
+    setCheckingMore(false)
   }
 
   // hook that keeps scrollbar at bottom when adding new
@@ -64,6 +76,7 @@ export default function App() {
                   <Task
                     data={t}
                     key={t.id}
+                    onClickMore={() => handleMoreOpen(t)}
                   />
                 )}
               </div>
@@ -76,6 +89,25 @@ export default function App() {
             </StyledBody>
           </Card>
         </Centered>
+        <Modal
+          isOpen={isCheckingMore}
+          size={MODALSIZE.auto}
+          onClose={handleMoreClose}
+        >
+          <ModalHeader>Details</ModalHeader>
+          <ModalBody>
+            {currentTask?.name}
+          </ModalBody>
+          <ModalFooter>
+            <ModalButton
+              kind="tertiary"
+              onClick={handleMoreClose}
+            >
+              Cancel
+            </ModalButton>
+            <ModalButton onClick={handleMoreClose}>Done</ModalButton>
+          </ModalFooter>
+        </Modal>
       </BaseProvider>
     </StyletronProvider>
   );

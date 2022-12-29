@@ -4,11 +4,11 @@ import { Button, SHAPE, SIZE as BUTTONSIZE } from 'baseui/button';
 import { Checkbox } from 'baseui/checkbox';
 import { Overflow } from 'baseui/icon';
 import { ListItem } from 'baseui/list';
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE } from 'baseui/modal';
 import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 
 type Props = {
   data?: Task;
+  onClickMore?: () => void;
 }
 
 const MORE_BTN_ID = 'btn--more'
@@ -21,7 +21,6 @@ export default function Task (props: Props) {
   const isFocusingTask = useTaskStore(state => state.currentFocusTaskId) === props.data?.id
   const [name, setName] = useState<TaskText>()
   const [remark, setRemark] = useState<TaskText>()
-  const [isCheckingMore, setCheckingMore] = useState(false)
   const setIsEditingNew = useTaskStore(state => state.setIsEditingNew)
   const addTask = useTaskStore(state => state.addTask)
   const editTask = useTaskStore(state => state.editTask)
@@ -73,11 +72,9 @@ export default function Task (props: Props) {
   }
 
   const handleMoreOpen = () => {
-    setCheckingMore(true)
-  }
-
-  const handleMoreClose = () => {
-    setCheckingMore(false)
+    if (props.onClickMore) {
+      props.onClickMore()
+    }
   }
 
   const handleTaskFocus = () => {
@@ -184,25 +181,6 @@ export default function Task (props: Props) {
           : null
         }
       </ListItem>
-      <Modal
-        isOpen={isCheckingMore}
-        size={MODALSIZE.auto}
-        onClose={handleMoreClose}
-      >
-        <ModalHeader>Details</ModalHeader>
-        <ModalBody>
-          {props.data?.name}
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton
-            kind="tertiary"
-            onClick={handleMoreClose}
-          >
-            Cancel
-          </ModalButton>
-          <ModalButton onClick={handleMoreClose}>Done</ModalButton>
-        </ModalFooter>
-      </Modal>
     </div>
   )
 }
