@@ -35,7 +35,7 @@ export default function Details (props: Props) {
   return (
     <Modal
       isOpen={props.open}
-      size={MODALSIZE.auto}
+      size={MODALSIZE.full}
       onClose={handleExit}
     >
       <ModalHeader>Details</ModalHeader>
