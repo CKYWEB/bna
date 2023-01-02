@@ -6,6 +6,7 @@ import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { useEffect, useRef, useState } from "react";
 import Details from "@/components/Details";
+import CardSelector from "@/components/CardSelector";
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -65,11 +66,13 @@ export default function App() {
                 },
               },
             }}
-            title="Now"
+            title={
+              <CardSelector />
+            }
           >
             <StyledBody
               ref={cardBodyRef}
-              style={{overflowY: 'auto', height: '610px', display: 'flex', flexDirection: 'column',}}
+              style={{overflowY: 'auto', height: '586px', display: 'flex', flexDirection: 'column',}}
             >
               {/*key prop using to force tasks to re-render when edited in Details component*/}
               <div key={String(new Date())}>

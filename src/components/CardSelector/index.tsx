@@ -30,6 +30,7 @@ export default function CardSelector () {
       labelKey="id"
       options={CARD_TYPES}
       searchable={false}
+      size="large"
       value={value}
       onChange={params => setValue(params.value)}
     />
