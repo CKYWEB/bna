@@ -5,7 +5,7 @@ import { Card, StyledBody } from 'baseui/card';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { useEffect, useRef, useState } from "react";
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE } from "baseui/modal";
+import Details from "@/components/Details";
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -69,9 +69,10 @@ export default function App() {
           >
             <StyledBody
               ref={cardBodyRef}
-              style={{ overflowY: 'auto', height: '610px', display: 'flex', flexDirection: 'column', }}
+              style={{overflowY: 'auto', height: '610px', display: 'flex', flexDirection: 'column',}}
             >
-              <div>
+              {/*key prop using to force tasks to re-render when edited in Details component*/}
+              <div key={String(new Date())}>
                 {tasks.map(t =>
                   <Task
                     data={t}
@@ -81,33 +82,21 @@ export default function App() {
                 )}
               </div>
               <div
-                style={{ flexGrow:1, paddingBottom: '120px', }}
+                style={{flexGrow: 1, paddingBottom: '120px',}}
                 onClick={handleClickMargin}
               >
-                {isEditingNew && <Task data={undefined} /> }
+                {isEditingNew && <Task data={undefined}/>}
               </div>
             </StyledBody>
           </Card>
         </Centered>
-        <Modal
-          isOpen={isCheckingMore}
-          size={MODALSIZE.auto}
-          onClose={handleMoreClose}
-        >
-          <ModalHeader>Details</ModalHeader>
-          <ModalBody>
-            {currentTask?.name}
-          </ModalBody>
-          <ModalFooter>
-            <ModalButton
-              kind="tertiary"
-              onClick={handleMoreClose}
-            >
-              Cancel
-            </ModalButton>
-            <ModalButton onClick={handleMoreClose}>Done</ModalButton>
-          </ModalFooter>
-        </Modal>
+        {currentTask &&
+          <Details
+            initialData={currentTask}
+            open={isCheckingMore}
+            onClose={handleMoreClose}
+          />
+        }
       </BaseProvider>
     </StyletronProvider>
   );
