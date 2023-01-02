@@ -13,7 +13,7 @@
     "@types/styletron-react": "^5.0.3",
     "@types/styletron-standard": "^2.0.2",
     "baseui": "^12.1.3",
-    "lodash": "^4.17.21",
+    "immer": "^9.0.16",
     "react": "17.x",
     "react-dom": "17.x",
     "styletron-engine-atomic": "^1.5.0",

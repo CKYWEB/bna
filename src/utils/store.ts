@@ -1,5 +1,5 @@
 import { TASKS } from '@/utils/data';
-import _ from 'lodash';
+import { immer } from 'zustand/middleware/immer'
 import create from 'zustand';
 
 type FocusTypes = 'TEXT' | 'TASK'
@@ -27,59 +27,39 @@ const findTask = (tempTasks: Task[], targetId: string) => {
   return tempTasks.find(t=> t.id === targetId)
 }
 
-export const useTaskStore = create<TaskState>((set) => ({
+export const useTaskStore = create(immer<TaskState>((set) => ({
   tasks: TASKS,
   isEditingNew: false,
   currentFocusTextId: null,
   currentFocusTaskId: null,
   toggleTask: (targetId: string) => set(state => {
-    const tempTasks: Task[] = _.cloneDeep(state.tasks)
-    const targetTask = findTask(tempTasks, targetId)
+    const targetTask = findTask(state.tasks, targetId)
 
     if (targetTask !== undefined) {
       targetTask.isCompleted = !targetTask.isCompleted
     }
-
-    return {
-      tasks: tempTasks,
-    }
   }),
   editTask: (targetId: string, task: EditTaskForm) => set(state => {
-    const tempTasks: Task[] = _.cloneDeep(state.tasks)
-    const targetTask = findTask(tempTasks, targetId)
+    const targetTask = findTask(state.tasks, targetId)
 
     if (targetTask !== undefined) {
       targetTask.name = task.name
       targetTask.remark = task.remark
     }
-
-    return {
-      tasks: tempTasks,
-    }
   }),
   addTask: (name: TaskText, remark?: TaskText) => set(state => {
-    const tempTasks: Task[] = _.cloneDeep(state.tasks)
-    tempTasks.push({
+    state.tasks.push({
       id: String(new Date()),
       name,
       remark,
       isCompleted: false,
     })
-
-    return {
-      tasks: tempTasks,
-    }
   }),
   deleteTask: (targetId: string) => set(state => {
-    const tempTasks: Task[] = _.cloneDeep(state.tasks)
-    const targetTaskIndex = tempTasks.findIndex(t=> t.id === targetId)
+    const targetTaskIndex = state.tasks.findIndex(t=> t.id === targetId)
 
     if (targetTaskIndex !== undefined) {
-      tempTasks.splice(targetTaskIndex, 1)
-    }
-
-    return {
-      tasks: tempTasks,
+      state.tasks.splice(targetTaskIndex, 1)
     }
   }),
   setIsEditingNew: (v: boolean) => set(() => {
@@ -110,20 +90,16 @@ export const useTaskStore = create<TaskState>((set) => ({
     }
   }),
   sortTasks: () => set(state => {
-    const tempTasks: Task[] = _.cloneDeep(state.tasks)
+    state.tasks.sort((a,b) => {
+      if (a.isCompleted && !b.isCompleted) {
+        return 1
+      }
 
-    return {
-      tasks: tempTasks.sort((a,b) => {
-        if (a.isCompleted && !b.isCompleted) {
-          return 1
-        }
+      if (!a.isCompleted && b.isCompleted) {
+        return -1
+      }
 
-        if (!a.isCompleted && b.isCompleted) {
-          return -1
-        }
-
-        return 0
-      }),
-    }
+      return 0
+    })
   }),
-}))
+})))
