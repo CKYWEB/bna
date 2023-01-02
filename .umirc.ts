@@ -8,4 +8,7 @@ export default defineConfig({
     { path: '/', component: '@/pages/index' },
   ],
   fastRefresh: {},
+  outputPath: "./build",
+  publicPath: '/bna/',
+  base: '/bna/',
 });
