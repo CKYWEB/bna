@@ -5,4 +5,5 @@ type Task = {
   name: TaskText;
   remark?: TaskText;
   isCompleted: boolean;
+  deadline: string;
 }

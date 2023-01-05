@@ -1,12 +1,20 @@
 import { TASKS } from '@/utils/data';
 import { immer } from 'zustand/middleware/immer'
 import create from 'zustand';
+import { format } from "date-fns";
 
 type FocusTypes = 'TEXT' | 'TASK'
 
 type EditTaskForm = {
   name: TaskText;
   remark?: TaskText;
+  deadline?: Date;
+}
+
+type AddTaskForm = {
+  name: TaskText;
+  remark?: TaskText;
+  deadline?: Date;
 }
 
 interface TaskState {
@@ -16,7 +24,7 @@ interface TaskState {
   currentFocusTaskId: Task["id"] | null;
   toggleTask: (targetId: string) => void;
   editTask: (targetId: string, task: EditTaskForm) => void;
-  addTask: (name: TaskText, remark?: TaskText) => void;
+  addTask: (v: AddTaskForm) => void;
   deleteTask: (targetId: string) => void;
   setIsEditingNew: (v: boolean) => void;
   changeFocus: (id?: Task["id"], type?: FocusTypes) => void;
@@ -25,6 +33,10 @@ interface TaskState {
 
 const findTask = (tempTasks: Task[], targetId: string) => {
   return tempTasks.find(t=> t.id === targetId)
+}
+
+const formatToFullDate = (d: Date) => {
+  return format(d, 'yyyy-MM-dd HH:mm')
 }
 
 export const useTaskStore = create(immer<TaskState>((set) => ({
@@ -45,13 +57,17 @@ export const useTaskStore = create(immer<TaskState>((set) => ({
     if (targetTask !== undefined) {
       targetTask.name = task.name
       targetTask.remark = task.remark
+      if (task.deadline) {
+        targetTask.deadline = formatToFullDate(task.deadline)
+      }
     }
   }),
-  addTask: (name: TaskText, remark?: TaskText) => set(state => {
+  addTask: (v: AddTaskForm) => set(state => {
     state.tasks.push({
       id: String(new Date()),
-      name,
-      remark,
+      name: v.name,
+      remark: v.remark,
+      deadline: formatToFullDate(v.deadline ?? new Date()),
       isCompleted: false,
     })
   }),

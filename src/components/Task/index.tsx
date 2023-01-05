@@ -5,6 +5,7 @@ import { Checkbox } from 'baseui/checkbox';
 import { Overflow } from 'baseui/icon';
 import { ListItem } from 'baseui/list';
 import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
+import { Block } from "baseui/block";
 
 type Props = {
   data?: Task;
@@ -54,7 +55,7 @@ export default function Task (props: Props) {
 
     if (!props.data) {
       if (name) {
-        addTask(name,remark)
+        addTask({name, remark,})
       }
     } else if (!name) {
       deleteTask(props.data.id)
@@ -176,6 +177,22 @@ export default function Task (props: Props) {
                 onChange={handleRemarkChange}
                 onFocus={handleTextFocus}
               />
+            }
+            {props.data?.deadline ?
+              <Block
+                overrides={{
+                  Block:{
+                    style: ({ $theme, }) => {
+                      return {
+                        color: $theme.colors['primaryA'],
+                        fontSize: '12px',
+                      }
+                    },
+                  },
+                }}
+              >
+                {props.data.deadline}
+              </Block> : null
             }
           </div>
           : null
