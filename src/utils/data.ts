@@ -1,3 +1,5 @@
+import { addDays, format } from "date-fns";
+
 export const TASKS: Task[] = [
   {
     id: '1',
@@ -17,14 +19,15 @@ export const TASKS: Task[] = [
     name: 'Finish workout today',
     remark: 'Today is leg day',
     isCompleted: false,
-    deadline: '2022-12-29 08:00',
+    deadline: format(addDays(new Date(), 3), 'yyyy-MM-dd HH:mm'),
+
   },
   {
     id: '4',
     name: 'pray',
     remark: 'Jesus is king',
     isCompleted: false,
-    deadline: '2023-01-01 09:00',
+    deadline: format(addDays(new Date(), 5), 'yyyy-MM-dd HH:mm'),
   },
   {
     id: '5',

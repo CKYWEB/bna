@@ -7,6 +7,7 @@ import { Provider as StyletronProvider } from 'styletron-react';
 import { useEffect, useRef, useState } from "react";
 import Details from "@/components/Details";
 import CardSelector from "@/components/CardSelector";
+import { addDays, isAfter, isBefore } from 'date-fns';
 
 const engine = new Styletron();
 const Centered = styled('div', {
@@ -21,9 +22,11 @@ export default function App() {
   const isEditingNew = useTaskStore(state => state.isEditingNew)
   const setIsEditingNew = useTaskStore(state => state.setIsEditingNew)
   const changeFocus = useTaskStore(state => state.changeFocus)
+  const currentTaskType = useTaskStore(state => state.currentTaskType)
   const cardBodyRef = useRef<HTMLDivElement>(null)
   const [isCheckingMore, setCheckingMore] = useState(false)
   const [currentTask, setCurrentTask] = useState<Task>()
+  const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
 
   const handleClickMargin = () => {
     setIsEditingNew(true)
@@ -39,6 +42,40 @@ export default function App() {
     setCheckingMore(false)
   }
 
+  const getTypeTasks = (v: TaskTypeId) => {
+    if (v === '0') {
+      return tasks.filter((t) => {
+        return t.isCompleted
+      })
+    }
+
+    if (v === '1') {
+      return tasks.filter((t) => {
+        if (t.isCompleted) {
+          return false
+        }
+
+        const twoDaysFromNow = addDays(new Date(), 2)
+
+        return isBefore(new Date(t.deadline), twoDaysFromNow)
+      })
+    }
+
+    if (v === '2') {
+      return tasks.filter((t) => {
+        if (t.isCompleted) {
+          return false
+        }
+
+        const twoDaysFromNow = addDays(new Date(), 2)
+
+        return isAfter(new Date(t.deadline), twoDaysFromNow)
+      })
+    }
+
+    return []
+  }
+
   // hook that keeps scrollbar at bottom when adding new
   useEffect(() => {
     const cardBodyCurrent = cardBodyRef?.current
@@ -47,6 +84,10 @@ export default function App() {
       cardBodyCurrent.scrollTop = cardBodyCurrent.scrollHeight
     }
   }, [isEditingNew])
+
+  useEffect(() => {
+    setFilteredTasks(getTypeTasks(currentTaskType))
+  }, [currentTaskType])
 
   return (
     <StyletronProvider value={engine}>
@@ -76,7 +117,7 @@ export default function App() {
             >
               {/*key prop using to force tasks to re-render when edited in Details component*/}
               <div key={String(new Date())}>
-                {tasks.map(t =>
+                {filteredTasks.map(t =>
                   <Task
                     data={t}
                     key={t.id}

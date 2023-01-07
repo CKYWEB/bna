@@ -22,11 +22,13 @@ interface TaskState {
   isEditingNew: boolean;
   currentFocusTextId: Task["id"] | null;
   currentFocusTaskId: Task["id"] | null;
+  currentTaskType: TaskTypeId;
   toggleTask: (targetId: string) => void;
   editTask: (targetId: string, task: EditTaskForm) => void;
   addTask: (v: AddTaskForm) => void;
   deleteTask: (targetId: string) => void;
   setIsEditingNew: (v: boolean) => void;
+  setCurrentTaskType: (v: TaskTypeId) => void;
   changeFocus: (id?: Task["id"], type?: FocusTypes) => void;
   sortTasks: () => void;
 }
@@ -44,6 +46,7 @@ export const useTaskStore = create(immer<TaskState>((set) => ({
   isEditingNew: false,
   currentFocusTextId: null,
   currentFocusTaskId: null,
+  currentTaskType: '1',
   toggleTask: (targetId: string) => set(state => {
     const targetTask = findTask(state.tasks, targetId)
 
@@ -81,6 +84,11 @@ export const useTaskStore = create(immer<TaskState>((set) => ({
   setIsEditingNew: (v: boolean) => set(() => {
     return {
       isEditingNew: v,
+    }
+  }),
+  setCurrentTaskType: (v: TaskTypeId) => set(() => {
+    return {
+      currentTaskType: v, 
     }
   }),
   changeFocus: (id?: Task["id"], type?: FocusTypes) => set(() => {
