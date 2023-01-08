@@ -88,7 +88,7 @@ export default function App() {
 
   useEffect(() => {
     setFilteredTasks(getTypeTasks(currentTaskType))
-  }, [currentTaskType])
+  }, [currentTaskType, tasks])
 
   return (
     <StyletronProvider value={engine}>
