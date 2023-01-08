@@ -27,7 +27,6 @@ export default function Task (props: Props) {
   const editTask = useTaskStore(state => state.editTask)
   const deleteTask = useTaskStore(state => state.deleteTask)
   const changeFocus = useTaskStore(state => state.changeFocus)
-  const sortTasks = useTaskStore(state => state.sortTasks)
 
   const handleMoreBtnClick = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>) => {
     if (e.relatedTarget?.id === MORE_BTN_ID) {
@@ -41,7 +40,6 @@ export default function Task (props: Props) {
   const handleCheckChange = (targetId: string | undefined) => {
     if (targetId) {
       toggleTask(targetId)
-      sortTasks()
     }
   }
 
@@ -91,7 +89,6 @@ export default function Task (props: Props) {
   useEffect(() => {
     setName(props.data?.name)
     setRemark(props.data?.remark)
-    sortTasks()
   }, [])
 
   return (
