@@ -20,9 +20,7 @@
     "baseui"
   ],
   "rules": {
-    "comma-dangle": ["error", {
-      "objects": "always"
-    }],
+    "comma-dangle": ["error", "always-multiline"],
     "indent": ["error", 2],
     "baseui/deprecated-theme-api": "warn",
     "baseui/deprecated-component-api": "warn",
@@ -39,6 +37,8 @@
       }
     ],
     "react/self-closing-comp": "warn",
-    "react/jsx-first-prop-new-line": [2, "multiline"]
+    "react/jsx-first-prop-new-line": [2, "multiline"],
+    "object-curly-spacing": [ "error", "always" ],
+    "newline-after-var": ["error", "always"]
   }
 }

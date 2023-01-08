@@ -17,6 +17,7 @@ const Centered = styled('div', {
   height: '100%',
   paddingTop: '20px',
 });
+
 export default function App() {
   const tasks = useTaskStore(state => state.tasks)
   const isEditingNew = useTaskStore(state => state.isEditingNew)
@@ -113,7 +114,7 @@ export default function App() {
           >
             <StyledBody
               ref={cardBodyRef}
-              style={{overflowY: 'auto', height: '586px', display: 'flex', flexDirection: 'column',}}
+              style={{ overflowY: 'auto', height: '586px', display: 'flex', flexDirection: 'column' }}
             >
               {/*key prop using to force tasks to re-render when edited in Details component*/}
               <div key={String(new Date())}>
@@ -122,11 +123,11 @@ export default function App() {
                     data={t}
                     key={t.id}
                     onClickMore={() => handleMoreOpen(t)}
-                  />
+                  />,
                 )}
               </div>
               <div
-                style={{flexGrow: 1, paddingBottom: '120px',}}
+                style={{ flexGrow: 1, paddingBottom: '120px' }}
                 onClick={handleClickMargin}
               >
                 {isEditingNew && <Task data={undefined}/>}

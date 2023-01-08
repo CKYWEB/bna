@@ -41,5 +41,5 @@ export const TASKS: Task[] = [
     name: 'Contribute my code repository',
     isCompleted: false,
     deadline: '2023-01-03 09:00',
-  }
+  },
 ]

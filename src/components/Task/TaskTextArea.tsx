@@ -16,7 +16,7 @@ type Props = {
 
 export default function TaskTextArea (props: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const {onKeyPress, onBlur, onChange, onFocus,} = props
+  const { onKeyPress, onBlur, onChange, onFocus } = props
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (onKeyPress) {
@@ -57,7 +57,7 @@ export default function TaskTextArea (props: Props) {
           }),
         },
         Input: {
-          style: ({ $theme, }) => {
+          style: ({ $theme }) => {
             return {
               backgroundColor: '#FFF',
               color: $theme.colors[props.isGray ? 'mono600' : 'primaryA'],

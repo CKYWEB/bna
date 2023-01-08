@@ -1,12 +1,12 @@
 import Task from "@/components/Task";
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE} from "baseui/modal";
-import {useEffect, useState} from "react";
-import {FormControl} from "baseui/form-control";
-import {Input} from "baseui/input";
-import {useTaskStore} from "@/utils/store";
-import {Textarea} from "baseui/textarea";
-import {DatePicker, TimePicker} from "baseui/datepicker";
-import {format} from "date-fns";
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, SIZE as MODALSIZE } from "baseui/modal";
+import { useEffect, useState } from "react";
+import { FormControl } from "baseui/form-control";
+import { Input } from "baseui/input";
+import { useTaskStore } from "@/utils/store";
+import { Textarea } from "baseui/textarea";
+import { DatePicker, TimePicker } from "baseui/datepicker";
+import { format } from "date-fns";
 
 type Props = {
   open: boolean;
@@ -15,7 +15,7 @@ type Props = {
 }
 
 export default function Details (props: Props) {
-  const {initialData,}=props
+  const { initialData }=props
   const [name, setName] = useState<TaskText>()
   const [remark, setRemark] = useState<TaskText>()
   const [date, setDate] = useState<[Date]>([new Date()]);
@@ -34,7 +34,7 @@ export default function Details (props: Props) {
   }
 
   const handleDone = async () => {
-    editTask(initialData.id, {name, remark, deadline: generateDateObj(date[0],time),})
+    editTask(initialData.id, { name, remark, deadline: generateDateObj(date[0],time) })
     props.onClose()
   }
 
@@ -71,7 +71,7 @@ export default function Details (props: Props) {
         <FormControl label="Date">
           <DatePicker
             value={date}
-            onChange={({ date, }) => {
+            onChange={({ date }) => {
               if (date && !Array.isArray(date)) {
                 setDate([date])
               }

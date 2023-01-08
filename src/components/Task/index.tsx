@@ -55,12 +55,12 @@ export default function Task (props: Props) {
 
     if (!props.data) {
       if (name) {
-        addTask({name, remark,})
+        addTask({ name, remark })
       }
     } else if (!name) {
       deleteTask(props.data.id)
     } else {
-      editTask(props.data.id, {name, remark,})
+      editTask(props.data.id, { name, remark })
     }
   }
 
@@ -126,7 +126,7 @@ export default function Task (props: Props) {
         )}
         overrides={{
           Root: {
-            style: ({ $theme, }) => ({
+            style: ({ $theme }) => ({
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: $theme.colors[isFocusingTask ? 'primary300' : 'primaryB'],
@@ -158,7 +158,7 @@ export default function Task (props: Props) {
         key={props.data?.id}
       >
         {name !== undefined || isEditingNew ?
-          <div style={{display: 'flex', flexDirection: 'column',}}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <TaskTextArea
               autoFocus={props.data === undefined}
               isGray={props.data?.isCompleted}
@@ -182,7 +182,7 @@ export default function Task (props: Props) {
               <Block
                 overrides={{
                   Block:{
-                    style: ({ $theme, }) => {
+                    style: ({ $theme }) => {
                       return {
                         color: $theme.colors['primaryA'],
                         fontSize: '12px',

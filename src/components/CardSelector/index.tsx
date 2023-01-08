@@ -1,15 +1,15 @@
 import { useTaskStore } from "@/utils/store";
-import {OnChangeParams, Select, Value} from "baseui/select";
-import {useState} from "react";
+import { OnChangeParams, Select, Value } from "baseui/select";
+import { useState } from "react";
 
 type TaskTypeOption = {
   label: string,
   id: TaskTypeId,
 }
 const CARD_TYPES: TaskTypeOption[] = [
-  { label: "Before", id: "0", },
-  { label: "Now", id: "1", },
-  { label: "After", id: "2", }
+  { label: "Before", id: "0" },
+  { label: "Now", id: "1" },
+  { label: "After", id: "2" },
 ]
 
 export default function CardSelector () {
