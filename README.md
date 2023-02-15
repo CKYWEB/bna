@@ -1,14 +1,16 @@
-<h1 style="text-align: center">bna</h1>
+<h1 align="center">
+  bna
+</h1>
 
-<p style="text-align:center;font-style: italic">
+<p align="center">
   Before, Now & After
 </p>
 
-<p style="text-align:center">
+<p align="center">
   <img src="./images/bna.jpg" width="428" alt="bna">
 </p>
 
-<p style="text-align: center">
+<p align="center">
   Organize your work in a new timeline way.
 </p>
 
