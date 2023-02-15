@@ -16,8 +16,8 @@ export const TASKS: Task[] = [
   },
   {
     id: '3',
-    name: 'Finish workout today',
-    remark: 'Today is leg day',
+    name: 'finish workout today',
+    remark: 'today is leg day',
     isCompleted: false,
     deadline: format(addDays(new Date(), 3), 'yyyy-MM-dd HH:mm'),
 
@@ -25,20 +25,20 @@ export const TASKS: Task[] = [
   {
     id: '4',
     name: 'pray',
-    remark: 'Jesus is king',
+    remark: 'jesus is king',
     isCompleted: false,
     deadline: format(addDays(new Date(), 5), 'yyyy-MM-dd HH:mm'),
   },
   {
     id: '5',
-    name: 'Listen to Kendrick',
-    remark: 'The Big Steppers',
+    name: 'listen to Kendrick',
+    remark: 'the big steppers',
     isCompleted: false,
     deadline: '2023-01-01 09:00',
   },
   {
     id: '6',
-    name: 'Contribute my code repository',
+    name: 'contribute my code repository',
     isCompleted: false,
     deadline: '2023-01-03 09:00',
   },
